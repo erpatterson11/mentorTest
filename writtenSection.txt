@@ -2,27 +2,175 @@ Answer each question in a written format
 
 1. What does semantic HTML mean?
 
+  Semantic HTML means HTML elements have meaning that relate to the intended use and/or function of the element for both the browser AND the user.
+
+  - Examples of semantic HTML are <form>, <img>, <audio>, <video>, <table>, <cite>, <header>, <footer>, and <section>.
+
+  - Examples of NON-semantic HTML are <div> and <span>.
+
 2. What is the box model?
+
+  The box model is a CSS design pattern that treats each element as if it were wrapped in a box. Each box has 4 parts that can be manipulated with CSS:
+    - margin (space between other boxes and the border of the box)
+    - border (the boundary line that defines the box)
+    - padding (the spacing between the border of the box and the actual content)
+    - content (the actual content of the element, such as text, images, etc..)
 
 3. What is the difference between IDs and Classes?
 
+  - ID's are unique to one specific DOM element. They cannot be re-used.
+  - Classes can be used on multiple DOM elements.
+
 4. What does the z-index do?
+
+  Z-index specifies which element is placed in front of or behind another element. The order is determined by how large or small (negative inclusive) the z-index is. Z-index only affects DOM elements that have a position (fixed, absolute, or relative).
+
+  In the below example box-2 would appear on top of box 1:
+
+      <div id='box-1' style='position:fixed'> This box is on bottom </div>
+      <div id='box-2' style='position:fixed'> This box is on top </div>
+
+  However, if box-1 was given a z-index of 1, it would appear on top of box 2:
+
+      <div id='box-1' style='position:fixed;z-index:1'> This box is on top </div>
+      <div id='box-2' style='position:fixed'> This box is on bottom </div>
+
 
 5. Summarize what the keyword 'this' is used for?
 
+   - The keyword "this" is used to refer to the object (or the "context") in which the keyword "this" is used.
+
+
+                     let person = {
+                      firstname: 'John',
+                      lastname: 'Smith',
+                      sayName: function() {
+                        return this.firstname + " " + this.lastname
+                      }
+                     }
+
+                     person.sayName() // returns "John Smith" because "this" is invoked in the context of "person" object
+
+
+ - An important thing to understand about "this" in JavaScript is that its context is defined only when it is invoked.
+
+
+                      let reassignedFunction = person.sayName
+
+                      reassignedFunction() // returns "undefined undefined" because "this" is invoked in the context of the window object,
+                                           // which doesn't have properties "firstname" or "lastname"
+
+
+   - Javascript provides three methods on the "function" prototype for explicitly setting the context of the "this" keyword. These methods are:
+
+                     .bind()
+                     .apply()
+                     .call()
+
+   - Bind is used to assign context. Apply and call are used to assign context and immediately invoke the function. The differences are that apply accepts arguments as an array and call accepts arguments as a list separated by commas.
+
+   - It's also important to note that "this" behaves differently in normal functions and arrow functions when used in object methods:
+
+
+                      let obj = {
+                        value: 3,
+                        singleFunc: function() {
+                                      console.log(this.value)
+                                    },
+                        nestedFunc: function() {
+                                      let innerFunc = function() {console.log(this.value)}
+                                      innerFunc()
+                                    },
+                        singleArrow: () => {
+                                      console.log(this.vale)
+                                    },
+                        nestedArrow: function() {
+                                      let innerArrowFunc = () => console.log(this.value)
+                                      innerArrowFunc()
+                                    }
+                      }
+
+
+                      obj.singleFunc() // returns 3
+                      obj.nestedFunc() // returns undefined
+                      obj.singleArrow() // returns undefined
+                      obj.nestedArrow() // returns 3
+
+    - Regular functions will only maintain the context to "obj" for a function immediately invoked on an object method.
+    - Arrow functions will only maintain context to "obj" for a function nested in an object method of a regular function. For this reason arrow functions can never be used for prototypes or constructor functions. However they are useful for maintaining context inside of a method.
+
+
 6. What is a callback?
+
+    A callback is a function that is used as an argument in a another function and then invoked within that other function. Callbacks are useful because they help make code modular, easy to read/understand, and re-usable.
 
 7. What is a closure?
 
+    A closure is a function within another function. What makes closures useful is that they store reference to the variables and parameters of the outer scope (from the outer function all the way to the global scope) even after the outer function has already been executed.
+
 8. How does prototype work?
+
+    Prototypes work by providing a reference to methods and properties for other objects that have that prototype.
+    It is important to understand that the connection between an object and its prototype is a REFERENCE and not an inheretence. The methods and properties only exist on the prototype. This means that if a prototype method is altered then any object with that reference will refer to the new modified method. Additionally, if a new method or property is added to the prototype than every object with the prototype will have access to the new method or property.
 
 9. What is MVC?
 
+    MVC is a schema for building user application that breaks the  application into three distinc parts: the model, the view, and the controller. The application operates by separating the data and logic (model) from what is rendered to the user (view), and using an intermediary (controller) to manage changes and updates between the two.
+
 10. What is the component lifecycle?
+
+    The component lifecycle is how components in the React.JS library are created, updated, and removed from the DOM. The lifecycle consists of the following phases each with their own methods to manage component creation, update, and removal:
+
+    1) Initial Render
+        - getDefaultProps
+              - specifies the default value of the components' props
+              - occurs before component is created
+        - getInitialState
+              - specifies the state of the component
+              - occurs before component is created
+        - componentWillMount
+              - perform other functions before component creation
+              - occurs before component is created
+        - render
+              - creates component on virtual DOM
+        - componentDidMount
+              - perform functions after component is placed on DOM
+
+    2a)  State Change
+        - shouldComponentUpdate
+              - stop component re-render if specific state-change conditions are met
+        - componentWillUpdate
+              - perform other functions before component re-creation
+        - render
+              - re-creates component on virtual DOM
+        - componentDidUpdate
+              - perform other functions after compoonent is re-rendered on DOM
+
+    2b) Props Change
+        - componentWillReceiveProps
+              - update props on component
+        - shouldComponentUpdate
+              - stop component re-render if specific prop-change conditions are met
+        - componentWillUpdate
+              - perform other functions before component re-creation
+        - render
+              - re-creates component on virtual DOM
+        - componentDidUpdate
+              - perform other functions after compoonent is re-rendered on DOM
+
+    3) Unmount
+        - componentWillUnmount
+              - perform functions before component is removed from DOM
 
 11. What is REST?
 
+    REST is a set of constraints/rules for sending and receiving data across the internet. Some of these rules include the use of CRUD operations in HTTP requests, using URLs to identify resources instead of identifying function, separating user interface from data storage (client-server), stateless communication (all information required to process the request is in the request), and a uniform interface (sending data in HTML, XML and/or JSON).
+
 12. Name three ways of getting data from the URL using express
+
+  1. Query: req.query
+  2. Parameters: req.params
+  3.
 
 create table users (
 id serial,
@@ -34,8 +182,20 @@ email varchar(255)
 
 -Get all users:
 
+  select * from users
+
 -Create a new user with the name of 'your name' and an email of 'fake@fake.com':
+
+  insert into users (name, email)
+  values ('your name',m 'fake@fake.com')
 
 -Update the newly created user's name to 'Bobby Boy':
 
+  UPDATE users
+  SET NAME = 'Bobby Boy'
+  WHERE NAME = 'your name'
+
 -Delete the newly updated user:
+
+  DELETE FROM users
+  WHERE NAME = 'your name'
